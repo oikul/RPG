@@ -8,7 +8,7 @@ import utils.AbstractMain;
 public class Main extends AbstractMain {
 
 	private static final long serialVersionUID = 1L;
-	Graphics offG;
+	private Graphics offG;
 
 	@Override
 	public void initialise() {
