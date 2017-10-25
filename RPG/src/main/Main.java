@@ -26,7 +26,7 @@ public class Main extends AbstractMain {
 
 	@Override
 	public void update(float time) {
-		
+		Block.updateliquids();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class Main extends AbstractMain {
 		for(int i = 0; i < noise.length; i++){
 			for(int j = 0; j < noise[0].length; j++){
 				if(noise[i][j] < 0.5){
-					Block.lava.draw(offG, (int)(i * 16 * ratio), (int) (j * 16 * ratio), ratio, width, height);
+					Block.water_river.draw(offG, (int)(i * 16 * ratio), (int) (j * 16 * ratio), ratio, width, height);
 				}else{
 					Block.sand_dunes.draw(offG, (int)(i * 16 * ratio), (int) (j * 16 * ratio), ratio, width, height);
 				}

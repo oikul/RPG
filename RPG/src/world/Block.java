@@ -41,6 +41,14 @@ public class Block {
 		}
 	}
 	
+	public static void updateliquids(){
+		lava.update();
+		water_murky.update();
+		water_ocean.update();
+		water_river.update();
+		water_test.update();
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -89,6 +97,9 @@ public class Block {
 		this.height = height;
 	}
 	
+	public static final Block flower = new Block("flower", "decoration/flower", 0, false, 16, 16);
+	public static final Block flowers = new Block("flowers", "decoration/flowers", 0, false, 16, 16);
+	
 	public static final Block grass_forest = new Block("grass", "grass/grass_forest", 0, false, 16, 16);
 	public static final Block grass_jungle = new Block("grass", "grass/grass_jungle", 0, false, 16, 16);
 	public static final Block grass_mountains = new Block("grass", "grass/grass_mountains", 0, false, 16, 16);
@@ -104,7 +115,7 @@ public class Block {
 	public static final Block ice_spikes_1 = new Block("ice spikes", "ice/ice_spikes_1", 0, false, 16, 16);
 	public static final Block snow = new Block("snow", "ice/snow_1", 0, false, 16, 16);
 	
-	public static final Block lava = new Block("lava", "lava/lava", 700, true, 16, 16);
+	public static final Block lava = new Block("lava", "lava/lava", 900, true, 16, 16);
 	
 	public static final Block sand = new Block("sand", "sand/sand", 0, false, 16, 16);
 	public static final Block sand_arid = new Block("sand", "sand/sand_arid", 0, false, 16, 16);
