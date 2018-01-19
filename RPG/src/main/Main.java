@@ -1,7 +1,7 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 import world.World;
 
@@ -9,16 +9,16 @@ public class Main extends AbstractMain {
 
 	private static final long serialVersionUID = 1L;
 	private Graphics offG;
-	public static float ratio = Math.min(InputHandler.screenSize.width, InputHandler.screenSize.height) / 12f / 16f;
+	public static float ratio = Math.min(InputHandler.screenSize.width, InputHandler.screenSize.height) / 12f / 32f;
 	private World world;
+	private Random random = new Random();
 
 	@Override
 	public void initialise() {
 		running = true;
 		this.defaultInit("RPG Game");
 		offG = offImage.getGraphics();
-		offG.setColor(Color.BLACK);
-		offG.fillRect(0, 0, width, height);
+		world = new World(random.nextLong(), random.nextLong(), random.nextLong());
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class Main extends AbstractMain {
 	@Override
 	public void draw() {
 		world.draw(offG);
-		g.drawImage(offImage, 0, 0, null);
+		g.drawImage(offImage, 0, 0, width, height, null);
 	}
 
 	@Override
