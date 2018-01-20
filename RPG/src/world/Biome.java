@@ -6,12 +6,14 @@ public class Biome {
 	
 	private String name;
 	private ArrayList<BiomePart> baseParts, waterParts, decoParts;
+	public static ArrayList<Biome> biomes = new ArrayList<Biome>();
 	
 	public Biome(String name){
 		setName(name);
 		baseParts = new ArrayList<BiomePart>();
 		waterParts = new ArrayList<BiomePart>();
 		decoParts = new ArrayList<BiomePart>();
+		biomes.add(this);
 	}
 	
 	public void addBiomePart(BiomePart biomePart){

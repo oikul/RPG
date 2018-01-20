@@ -31,8 +31,8 @@ package voronoi;
 // used both for sites and for vertices
 public class Site
 {
-    Point coord;
-    int sitenbr;
+    public Point coord;
+    public int sitenbr;
 
     public Site()
     {

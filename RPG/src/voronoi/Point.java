@@ -28,9 +28,10 @@ or implied, of James Humphreys.
 
 package voronoi;
 
-class Point
+public class Point
 {
-    double x, y;
+    public double x;
+	public double y;
 
     public Point()
     {

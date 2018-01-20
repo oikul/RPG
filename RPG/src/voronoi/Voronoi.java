@@ -562,8 +562,8 @@ public class Voronoi
         newEdge.x2 = x2;
         newEdge.y2 = y2;
 
-        newEdge.site1 = leftSite.sitenbr;
-        newEdge.site2 = rightSite.sitenbr;
+        newEdge.site1 = leftSite;
+        newEdge.site2 = rightSite;
     }
 
     private void clip_line(Edge e)
