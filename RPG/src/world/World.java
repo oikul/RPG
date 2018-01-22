@@ -22,6 +22,7 @@ public class World {
 	private Random random;
 	private List<BiomeBorder> biomeBorders;
 	public static ArrayList<Biome> assignedBiomes = new ArrayList<Biome>();
+	private int xDif, yDif;
 
 	public World(long tempSeed, long precipSeed, long heightSeed) {
 		heightGen = new ValueNoiseGenerator(heightSeed, 0.25f, 1, 4);
@@ -50,17 +51,19 @@ public class World {
 		decoG = decoLayer.getGraphics();
 		terrainG = terrain.getGraphics();
 		drawLayers();
-		createTerrain();
 	}
 
 	public void update() {
+		createTerrain();
 	}
 
 	public void draw(Graphics g) {
+		g.setColor(Color.black);
+		g.fillRect(0, 0, Main.width, Main.height);
 		g.drawImage(terrain, 0, 0, Main.width, Main.height, null);
 		for (BiomeBorder bb : biomeBorders) {
 			g.setColor(Color.BLACK);
-			g.drawLine((int) bb.getX1(), (int) bb.getY1(), (int) bb.getX2(), (int) bb.getY2());
+			g.drawLine((int) bb.getX1() + xDif, (int) bb.getY1() + yDif, (int) bb.getX2() + xDif, (int) bb.getY2() + yDif);
 		}
 	}
 

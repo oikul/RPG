@@ -36,7 +36,7 @@ public class Block {
 	}
 	
 	public void draw(Graphics g, int x, int y, float scale, int screenWidth, int screenHeight){
-		if(x < screenWidth && y < screenHeight){
+		if(x < screenWidth && y < screenHeight && x > -(width * scale) && y > -(height * scale)){
 			g.drawImage(sprites[currentFrame], x, y, (int) (width * scale), (int) (height * scale), null);
 		}
 	}
