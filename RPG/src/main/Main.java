@@ -9,7 +9,7 @@ public class Main extends AbstractMain {
 
 	private static final long serialVersionUID = 1L;
 	private Graphics offG;
-	public static float ratio = Math.min(InputHandler.screenSize.width, InputHandler.screenSize.height) / 12f / 16f;
+	public static float ratio = Math.min(InputHandler.screenSize.width, InputHandler.screenSize.height) / 12f / 64f;
 	private World world;
 	private Random random = new Random();
 

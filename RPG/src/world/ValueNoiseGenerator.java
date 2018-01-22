@@ -20,7 +20,7 @@ public class ValueNoiseGenerator {
 		float[][] valueNoise = new float[width][height];
 		for(int i = startX; i < startX + width; i++){
 			for(int j = startY; j < startY + height; j++){
-				valueNoise[i][j] = generateHeight(i, j);
+				valueNoise[i - startX][j - startY] = generateHeight(i, j);
 			}
 		}
 		return valueNoise;

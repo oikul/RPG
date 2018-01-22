@@ -16,8 +16,7 @@ public class World {
 
 	public static ValueNoiseGenerator heightGen;
 	private double[] xValues, yValues;
-	// private ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-	Chunk chunk;
+	private ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 	private BufferedImage baseLayer, waterLayer, decoLayer, terrain;
 	private Graphics baseG, waterG, decoG, terrainG;
 	private Random random;
@@ -30,15 +29,18 @@ public class World {
 		xValues = new double[10];
 		yValues = new double[10];
 		for (int i = 0; i < xValues.length; i++) {
-			xValues[i] = random.nextDouble() * (double) Main.width * 2 * Main.ratio - Main.width / 2 * Main.ratio;
-			yValues[i] = random.nextDouble() * (double) Main.height * 2 * Main.ratio - Main.height / 2 * Main.ratio;
+			xValues[i] = random.nextDouble() * (double) (Main.width * 2 - Main.width) * Main.ratio;
+			yValues[i] = random.nextDouble() * (double) (Main.height * 2 - Main.height) * Main.ratio;
 		}
 		Voronoi voronoi = new Voronoi(0);
-		List<GraphEdge> graphEdges = voronoi.generateVoronoi(xValues, yValues, 0, 32 * 16 * Main.ratio, 0,
-				32 * 16 * Main.ratio);
+		List<GraphEdge> graphEdges = voronoi.generateVoronoi(xValues, yValues, 0, (Main.width * 2 - Main.width) * Main.ratio, 0,
+				(Main.height * 2 - Main.height) * Main.ratio);
 		convertGraphEdges(graphEdges, xValues, yValues);
 		Biome.createDefaultBiomes();
-		chunk = new Chunk(0, 0);
+		chunks.add(new Chunk(0, 0));
+		chunks.add(new Chunk(32, 0));
+		chunks.add(new Chunk(0, 32));
+		chunks.add(new Chunk(32, 32));
 		baseLayer = new BufferedImage(Main.width, Main.height, BufferedImage.TYPE_INT_ARGB);
 		waterLayer = new BufferedImage(Main.width, Main.height, BufferedImage.TYPE_INT_ARGB);
 		decoLayer = new BufferedImage(Main.width, Main.height, BufferedImage.TYPE_INT_ARGB);
@@ -64,76 +66,84 @@ public class World {
 
 	public void drawLayers() {
 		Biome b = Biome.forest;
-		for (int i = 0; i < 32; i++) {
-			for (int j = 0; j < 32; j++) {
-				Point2D.Double p = new Point2D.Double(i * 16 * Main.ratio, j * 16 * Main.ratio);
-				for (BiomeBorder bb : biomeBorders) {
-					if (bb.isPointInTriangle1(p)) {
-						b = bb.getBiome1();
-						break;
-					} else if (bb.isPointInTriangle2(p)) {
-						b = bb.getBiome2();
-						break;
+		for (Chunk c : chunks) {
+			if (c.getStartx() > -Main.width && c.getStartx() < Main.width && c.getStarty() > -Main.height
+					&& c.getStarty() < Main.height) {
+				for (int i = c.getStartx(); i < c.getStartx() + 32; i++) {
+					for (int j = c.getStarty(); j < c.getStarty() + 32; j++) {
+						Point2D.Double p = new Point2D.Double(i * 16 * Main.ratio, j * 16 * Main.ratio);
+						for (BiomeBorder bb : biomeBorders) {
+							if (bb.isPointInTriangle1(p)) {
+								b = bb.getBiome1();
+								break;
+							} else if (bb.isPointInTriangle2(p)) {
+								b = bb.getBiome2();
+								break;
+							}
+						}
+						// b = chooseBiome(chunk.getTemperature(i, j),
+						// chunk.getPrecipitation(i, j));
+						for (BiomePart part : b.getBaseParts()) {
+							float chance = random.nextFloat();
+							if (part.getStart() <= c.getHeight(i, j)
+									&& part.getEnd() >= c.getHeight(i, j) && part.getChance() >= chance) {
+								part.getBlock().draw(baseG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
+										Main.ratio, Main.width, Main.height);
+							}
+
+							/**
+							 * System.out.println("\nstart: " + part.getStart()
+							 * + "\nend: " + part.getEnd() + "\nchance: " +
+							 * part.getChance() + "\nroll: " + chance);
+							 * System.out.println("temperature: " +
+							 * chunk.getTemperature(i, j) + "\nprecipitation: "
+							 * + chunk.getPrecipitation(i, j) + "\nheight: " +
+							 * chunk.getHeight(i, j) + "\nbiome: " +
+							 * b.getName());
+							 */
+
+						}
+						for (BiomePart part : b.getWaterParts()) {
+							float chance = random.nextFloat();
+							if (part.getStart() <= c.getHeight(i, j)
+									&& part.getEnd() >= c.getHeight(i, j) && part.getChance() >= chance) {
+								part.getBlock().draw(waterG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
+										Main.ratio, Main.width, Main.height);
+							}
+
+							/**
+							 * System.out.println("\nstart: " + part.getStart()
+							 * + "\nend: " + part.getEnd() + "\nchance: " +
+							 * part.getChance() + "\nroll: " + chance);
+							 * System.out.println("temperature: " +
+							 * chunk.getTemperature(i, j) + "\nprecipitation: "
+							 * + chunk.getPrecipitation(i, j) + "\nheight: " +
+							 * chunk.getHeight(i, j) + "\nbiome: " +
+							 * b.getName());
+							 */
+
+						}
+						for (BiomePart part : b.getDecoParts()) {
+							float chance = random.nextFloat();
+							if (part.getStart() <= c.getHeight(i, j)
+									&& part.getEnd() >= c.getHeight(i, j) && part.getChance() >= chance) {
+								part.getBlock().draw(decoG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
+										Main.ratio, Main.width, Main.height);
+							}
+
+							/*
+							 * System.out.println("\nstart: " + part.getStart()
+							 * + "\nend: " + part.getEnd() + "\nchance: " +
+							 * part.getChance() + "\nroll: " + chance);
+							 * System.out.println("temperature: " +
+							 * chunk.getTemperature(i, j) + "\nprecipitation: "
+							 * + chunk.getPrecipitation(i, j) + "\nheight: " +
+							 * chunk.getHeight(i, j) + "\nbiome: " +
+							 * b.getName());
+							 */
+
+						}
 					}
-				}
-				// b = chooseBiome(chunk.getTemperature(i, j),
-				// chunk.getPrecipitation(i, j));
-				for (BiomePart part : b.getBaseParts()) {
-					float chance = random.nextFloat();
-					if (part.getStart() <= chunk.getHeight(i, j) && part.getEnd() >= chunk.getHeight(i, j)
-							&& part.getChance() >= chance) {
-						part.getBlock().draw(baseG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
-								Main.ratio, Main.width, Main.height);
-					}
-
-					/**
-					 * System.out.println("\nstart: " + part.getStart() +
-					 * "\nend: " + part.getEnd() + "\nchance: " +
-					 * part.getChance() + "\nroll: " + chance);
-					 * System.out.println("temperature: " +
-					 * chunk.getTemperature(i, j) + "\nprecipitation: " +
-					 * chunk.getPrecipitation(i, j) + "\nheight: " +
-					 * chunk.getHeight(i, j) + "\nbiome: " + b.getName());
-					 */
-
-				}
-				for (BiomePart part : b.getWaterParts()) {
-					float chance = random.nextFloat();
-					if (part.getStart() <= chunk.getHeight(i, j) && part.getEnd() >= chunk.getHeight(i, j)
-							&& part.getChance() >= chance) {
-						part.getBlock().draw(waterG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
-								Main.ratio, Main.width, Main.height);
-					}
-
-					/**
-					 * System.out.println("\nstart: " + part.getStart() +
-					 * "\nend: " + part.getEnd() + "\nchance: " +
-					 * part.getChance() + "\nroll: " + chance);
-					 * System.out.println("temperature: " +
-					 * chunk.getTemperature(i, j) + "\nprecipitation: " +
-					 * chunk.getPrecipitation(i, j) + "\nheight: " +
-					 * chunk.getHeight(i, j) + "\nbiome: " + b.getName());
-					 */
-
-				}
-				for (BiomePart part : b.getDecoParts()) {
-					float chance = random.nextFloat();
-					if (part.getStart() <= chunk.getHeight(i, j) && part.getEnd() >= chunk.getHeight(i, j)
-							&& part.getChance() >= chance) {
-						part.getBlock().draw(decoG, (int) (i * 16 * Main.ratio), (int) (j * 16 * Main.ratio),
-								Main.ratio, Main.width, Main.height);
-					}
-
-					/*
-					 * System.out.println("\nstart: " + part.getStart() +
-					 * "\nend: " + part.getEnd() + "\nchance: " +
-					 * part.getChance() + "\nroll: " + chance);
-					 * System.out.println("temperature: " +
-					 * chunk.getTemperature(i, j) + "\nprecipitation: " +
-					 * chunk.getPrecipitation(i, j) + "\nheight: " +
-					 * chunk.getHeight(i, j) + "\nbiome: " + b.getName());
-					 */
-
 				}
 			}
 		}
@@ -214,7 +224,7 @@ public class World {
 	private void convertGraphEdges(List<GraphEdge> l, double[] xValues, double[] yValues) {
 		biomeBorders = new ArrayList<BiomeBorder>();
 		for (GraphEdge i : l) {
-			for(int j = 0; j < xValues.length; j++){
+			for (int j = 0; j < xValues.length; j++) {
 				biomeBorders.add(new BiomeBorder(i));
 			}
 		}
