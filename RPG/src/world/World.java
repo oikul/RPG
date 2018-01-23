@@ -70,8 +70,8 @@ public class World {
 	public void drawLayers() {
 		Biome b = Biome.forest;
 		for (Chunk c : chunks) {
-			if (c.getStartx() > -Main.width && c.getStartx() < Main.width && c.getStarty() > -Main.height
-					&& c.getStarty() < Main.height) {
+			if (c.getStartx() > -33 && c.getStartx() < 33 && c.getStarty() > -33
+					&& c.getStarty() < 33) {
 				for (int i = c.getStartx(); i < c.getStartx() + 32; i++) {
 					for (int j = c.getStarty(); j < c.getStarty() + 32; j++) {
 						Point2D.Double p = new Point2D.Double(i * 16 * Main.ratio, j * 16 * Main.ratio);
