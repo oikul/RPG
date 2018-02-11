@@ -51,10 +51,10 @@ public class World {
 		decoG = decoLayer.getGraphics();
 		terrainG = terrain.getGraphics();
 		drawLayers();
+		createTerrain();
 	}
 
 	public void update() {
-		createTerrain();
 	}
 
 	public void draw(Graphics g) {
